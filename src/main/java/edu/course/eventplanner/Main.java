@@ -8,6 +8,7 @@ import edu.course.eventplanner.service.TaskManager;
 import edu.course.eventplanner.service.VenueSelector;
 import edu.course.eventplanner.util.Generators;
 
+
 import java.util.*;
 public class Main {
     public static void main(String[] args) {
