@@ -14,11 +14,8 @@ public class VenueSelectorTest {
         List<Venue> venues = List.of(venue, venue2);
         VenueSelector venueSelector = new VenueSelector(venues);
 
-        
+        Venue budgeted = venueSelector.selectVenue(60000, 300);
 
-
-
-
-
+        assertEquals(venue,budgeted);
     }
 }

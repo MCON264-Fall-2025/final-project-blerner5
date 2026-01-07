@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SeatingPlannerTest {}
-/**
+
     @Test
     public void testSeatingPlanner() {
         Venue venue = new Venue("Palace", "10,000", "500", "50", "10");
@@ -36,4 +36,4 @@ public class SeatingPlannerTest {}
         assertEquals(10, tables.get(1).getGuests().size());
         assertEquals(5, tables.get(2).getGuests().size());
 }
-*/
+}
