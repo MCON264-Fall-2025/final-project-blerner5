@@ -3,12 +3,11 @@ package edu.course.eventplanner.service;
 import edu.course.eventplanner.model.Guest;
 import edu.course.eventplanner.model.Venue;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SeatingPlannerTest {}
+public class SeatingPlannerTest {
+
 
     @Test
     public void testSeatingPlanner() {
@@ -24,6 +23,7 @@ public class SeatingPlannerTest {}
 
     @Test
     public void generateSeatingTest() {
+        Map<Integer, List<Guest>> generateSeating = new Map<Integer, List<Guest>>() {
         List<Guest> guests = new ArrayList<>();
         for (int i = 1; i <= 25; i++) {
             guests.add(new Guest("Guest" + i, "General"));
@@ -35,5 +35,3 @@ public class SeatingPlannerTest {}
         assertEquals(10, tables.get(0).getGuests().size());
         assertEquals(10, tables.get(1).getGuests().size());
         assertEquals(5, tables.get(2).getGuests().size());
-}
-}
