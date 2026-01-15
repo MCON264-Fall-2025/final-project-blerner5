@@ -1,13 +1,128 @@
 package edu.course.eventplanner;
-
-import edu.course.eventplanner.model.Guest;
+import java.util.*;
+import edu.course.eventplanner.service.*;
+import edu.course.eventplanner.model.*;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Event Planner Mini — see README for instructions.");
+        Scanner keyboard = new Scanner(System.in);
+
+        GuestListManager guestList = new GuestListManager();
+        TaskManager taskManager = new TaskManager();
+        List<Venue> venues = new ArrayList<>();
+        Venue selectedVenue = null;
+        boolean running = true;
+
+        while (running) {
+            System.out.print("Event Planner Menu:");
+            System.out.println("1. Load sample data");
+            System.out.println("2. Add guest");
+            System.out.println("3. Remove guest");
+            System.out.println("4. Select venue");
+            System.out.println("5. Generate seating chart");
+            System.out.println("6. Add preparation task");
+            System.out.println("7. Execute next task");
+            System.out.println("8. Undo last task");
+            System.out.println("9. Print event summary");
+            System.out.println("0. Exit");
+            System.out.print("Choose an option: ");
+        }
+
+        String answer = keyboard.nextLine();
+
+        switch (answer) {
+            case "1":
+                venues = sampleVenues();
+                List<Guest> samples = sampleGuests(325);
+                for (int i = 0; i < samples.size(); i++) {
+                    guestList.addGuest(samples.get(i));
+                }
+                System.out.println("Loaded sample venues and 325 guests.");
+                break;
+            case "2":
+                System.out.print("Enter guest name: ");
+                String name = keyboard.nextLine();
+                System.out.print("Enter guest description: ");
+                String description = keyboard.nextLine();
+                guestList.addGuest(new Guest(name, description));
+                System.out.println("Guest added.");
+                break;
+            case "3":
+                System.out.print("Enter guest name to remove: ");
+                String removeName = keyboard.nextLine();
+                if (guestList.removeGuest(removeName)) {
+                    System.out.println("Guest removed.");
+                } else {
+                    System.out.println("Guest not found.");
+                }
+                break;
+            case "5":
+                if (selectedVenue == null) {
+                    System.out.println("Select a venue first.");
+                } else {
+                    SeatingPlanner planner = new SeatingPlanner(selectedVenue);
+                    Map<Integer, List<Guest>> seating = planner.generateSeating(guestList.getAllGuests());
+                    System.out.println("Seating chart generated:");
+                    List<Integer> tableNumbers = new ArrayList<>(seating.keySet());
+                    for (int i = 0; i < tableNumbers.size(); i++) {
+                        int table = tableNumbers.get(i);
+                        System.out.println("Table " + table + ": " + seating.get(table).size() + " guests");
+                    }
+                }
+                break;
+            case "6":
+                System.out.print("Enter task description: ");
+                String taskDesc = keyboard.nextLine();
+                taskManager.addTask(new Task(taskDesc));
+                System.out.println("Task added.");
+                break;
+            case "7":
 
 
+                Task executed = taskManager.executeNextTask();
+                if (executed == null) {
+                    System.out.println("No tasks to execute.");
+                } else {
+                    System.out.println("Executed: " + executed.getDescription());
+                }
+                break;
+            case "8":
+                Task undone = taskManager.undoLastTask();
+                if (undone == null) {
+                    System.out.println("No tasks to undo.");
+                } else {
+                    System.out.println("Undone: " + undone.getDescription());
+                }
+                break;
+            case "9":
+                System.out.println("Event Planner");
+                System.out.println("Guests: " + guestList.getGuestCount());
+                System.out.println("Venue: " + (selectedVenue == null ? "None" : selectedVenue.getName()));
+                System.out.println("Remaining tasks: " + taskManager.remainingTaskCount());
+                break;
+            default:
+                System.out.println("Please enter a valid vent planner menu option.");
+
+        }
+    }
+
+    private static List<Venue> sampleVenues() {
+        List<Venue> venues = new ArrayList<>();
+        venues.add(new Venue("Palace", 10000, 500, 50, 10));
+        venues.add(new Venue("Grand Hall", 8000, 300, 30, 10));
+        venues.add(new Venue("Garden Terrace", 6000, 200, 20, 10));
+        venues.add(new Venue("Community Center", 2000, 100, 10, 10));
+        venues.add(new Venue("Backyard Tent", 500, 40, 4, 10));
+        return venues;
+    }
+
+    private static List<Guest> sampleGuests(int n) {
+        List<Guest> guests = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            guests.add(new Guest("guest " + i, "description"));
+        }
+        return guests;
     }
 }

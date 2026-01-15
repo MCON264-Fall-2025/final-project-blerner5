@@ -9,6 +9,24 @@ public class SeatingPlanner {
         this.venue = venue;
     }
     public Map<Integer, List<Guest>> generateSeating(List<Guest> guests) {
-        return null;
+        Map<Integer, List<Guest>> seatingMap = new HashMap<>();
+        int SPT = venue.getSeatsPerTable();
+        int tables = 1;
+
+        List<Guest> currentTable = new ArrayList<>();
+
+        for (int i = 0; i < guests.size(); i++) {
+            currentTable.add(guests.get(i));
+
+            if((currentTable.size() == SPT)) {
+                seatingMap.put(tables, currentTable);
+                tables++;
+                currentTable = new ArrayList<>();
+            }
+        }
+        if (!currentTable.isEmpty()) {
+            seatingMap.put(tables, currentTable);
+        }
+        return seatingMap;
     }
 }

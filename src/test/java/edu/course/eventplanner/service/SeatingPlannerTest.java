@@ -11,27 +11,40 @@ public class SeatingPlannerTest {
 
     @Test
     public void testSeatingPlanner() {
-        Venue venue = new Venue("Palace", "10,000", "500", "50", "10");
+        Venue venue = new Venue("Palace", 10000,500, 50, 10);
 
         assertEquals("Palace", venue.getName());
         assertEquals( "10,000", venue.getCost());
-        assertEquals("500", venue.getTables());
+        assertEquals("500", venue.getCapacity());
         assertEquals("50", venue.getTables());
         assertEquals("10",  venue.getSeatsPerTable());
     }
-}
+
 
     @Test
     public void generateSeatingTest() {
-        Map<Integer, List<Guest>> generateSeating = new Map<Integer, List<Guest>>() {
-        List<Guest> guests = new ArrayList<>();
-        for (int i = 1; i <= 25; i++) {
-            guests.add(new Guest("Guest" + i, "General"));
+        Venue venue = new Venue("Palace", 10000,500, 50, 10);
+        SeatingPlanner planner = new SeatingPlanner(venue);
+
+        List <Guest> guests = new ArrayList<>();
+        for(int i =0; i<325; i++) {
+            guests.add(new Guest("guest " +i , " description "));
         }
 
-        List<Table> tables = planner.generateSeating(guests, venue);
+        Map<Integer, List<Guest>> seatingMap = planner.generateSeating(guests);
 
-        assertEquals(3, tables.size());
-        assertEquals(10, tables.get(0).getGuests().size());
-        assertEquals(10, tables.get(1).getGuests().size());
-        assertEquals(5, tables.get(2).getGuests().size());
+        assertNotNull(seatingMap);
+        assertEquals(33, seatingMap.size());
+
+        assertEquals(10, seatingMap.get(1).size());
+        assertEquals(10, seatingMap.get(2).size());
+        assertEquals(10, seatingMap.get(3).size());
+
+        assertEquals(5, seatingMap.get(33).size());
+
+        assertEquals("guest 0 description", seatingMap.get(1).get(0).getName());
+        assertEquals("guest 10 description", seatingMap.get(2).get(0).getName());
+        assertEquals("guest 20 description", seatingMap.get(3).get(0).getName()); }
+
+
+}
