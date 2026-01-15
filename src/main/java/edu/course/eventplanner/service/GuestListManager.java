@@ -1,44 +1,43 @@
 package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Guest;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuestListManager {
-    private final LinkedList<Guest> guests = new LinkedList<>();
-    private final Map<String, Guest> guestByName = new HashMap<>();
+    private final List<Guest> guests = new ArrayList<>();
 
     public void addGuest(Guest guest) {
-        if (guest == null || guest.getName() == null) {
-            return;
+        if (guest != null) {
+            guests.add(guest);
         }
-
-        guests.add(guest);
-        guestByName.put(guest.getName(), guest);
     }
 
     public boolean removeGuest(String guestName) {
-        Guest guest = guestByName.remove(guestName);
-        if (guest == null) {
-            return false; //
+        for (int i = 0; i < guests.size(); i++) {
+            if (guests.get(i).getName().equals(guestName)) {
+                guests.remove(i);
+                return true;
+            }
         }
-
-        guests.remove(guest);
-        return true;
+        return false;
     }
 
     public Guest findGuest(String guestName) {
-        Guest guest = guestByName.get(guestName);
-        if (guest == null) {
-            return null;
+        for (Guest g : guests) {
+            if (g.getName().equals(guestName)) {
+                return g;
+            }
         }
-
-        return guest;
+        return null;
     }
 
     public int getGuestCount() {
         return guests.size();
     }
+
     public List<Guest> getAllGuests() {
-        return guests;
+        return new ArrayList<>(guests);
     }
 }

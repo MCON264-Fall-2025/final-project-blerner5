@@ -1,9 +1,6 @@
 package edu.course.eventplanner.service;
-
 import edu.course.eventplanner.model.Venue;
-
 import java.util.List;
-
 public class VenueSelector {
     private final List<Venue> venues;
 
