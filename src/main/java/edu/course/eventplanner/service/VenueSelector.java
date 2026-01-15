@@ -9,12 +9,11 @@ public class VenueSelector {
         this.venues = venues;
     }
     public Venue selectVenue(double budget, int guestCount) {
-        for (int index = 0; index < guestCount; index++) {
-            Venue v = venues.get(index);
-            if (v.getCost()  <= budget && v.getCapacity() >= guestCount) {
+        for (int i = 0; i < venues.size(); i++) {
+            Venue v = venues.get(i);
+            if (v.getCost() <= budget && v.getCapacity() >= guestCount) {
                 return v;
             }
-        }
-        return null;
+        } return null;
     }
 }

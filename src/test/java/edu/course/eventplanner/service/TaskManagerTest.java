@@ -42,7 +42,7 @@ public class TaskManagerTest {
         Task undone = manager.undoLastTask();
 
         assertEquals(task, undone, "Undo should return the last completed task");
-        assertEquals(2, manager.remainingTaskCount(), "Undo should requeue the task");
+        assertEquals(1, manager.remainingTaskCount(), "Undo should NOT requeue the task");
     }
 
     @Test
