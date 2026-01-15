@@ -14,10 +14,10 @@ public class SeatingPlannerTest {
         Venue venue = new Venue("Palace", 10000,500, 50, 10);
 
         assertEquals("Palace", venue.getName());
-        assertEquals( "10,000", venue.getCost());
-        assertEquals("500", venue.getCapacity());
-        assertEquals("50", venue.getTables());
-        assertEquals("10",  venue.getSeatsPerTable());
+        assertEquals( 10000.00, venue.getCost());
+        assertEquals(500, venue.getCapacity());
+        assertEquals(50, venue.getTables());
+        assertEquals(10,  venue.getSeatsPerTable());
     }
 
 
