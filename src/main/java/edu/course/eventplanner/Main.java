@@ -1,23 +1,20 @@
 package edu.course.eventplanner;
+
 import java.util.*;
+
 import edu.course.eventplanner.service.*;
 import edu.course.eventplanner.model.*;
-
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
-
         GuestListManager guestList = new GuestListManager();
         TaskManager taskManager = new TaskManager();
         List<Venue> venues = new ArrayList<>();
         Venue selectedVenue = null;
-        boolean running = true;
-        Boolean finished = false;
-
-        while (finished == false) {
-            System.out.print("Event Planner Menu:");
+        boolean finished = false;
+        while (!finished) {
+            System.out.println("Event Planner Menu:");
             System.out.println("1. Load sample data");
             System.out.println("2. Add guest");
             System.out.println("3. Remove guest");
@@ -29,10 +26,7 @@ public class Main {
             System.out.println("9. Print event summary");
             System.out.println("0. Exit");
             System.out.print("Choose an option: ");
-
-
             String answer = keyboard.nextLine();
-
             switch (answer) {
                 case "1":
                     venues = sampleVenues();
@@ -59,6 +53,22 @@ public class Main {
                         System.out.println("Guest not found.");
                     }
                     break;
+                case "4":
+                    if (venues.isEmpty()) {
+                        System.out.println("Load sample data first.");
+                        break;
+                    }
+                    System.out.print("Enter event budget: ");
+                    double budget = Double.parseDouble(keyboard.nextLine());
+                    int count = guestList.getGuestCount();
+                    VenueSelector selector = new VenueSelector(venues);
+                    selectedVenue = selector.selectVenue(budget, count);
+                    if (selectedVenue != null) {
+                        System.out.println("Selected venue: " + selectedVenue.getName());
+                    } else {
+                        System.out.println("No venue fits the requirements.");
+                    }
+                    break;
                 case "5":
                     if (selectedVenue == null) {
                         System.out.println("Select a venue first.");
@@ -80,8 +90,6 @@ public class Main {
                     System.out.println("Task added.");
                     break;
                 case "7":
-
-
                     Task executed = taskManager.executeNextTask();
                     if (executed == null) {
                         System.out.println("No tasks to execute.");
@@ -98,21 +106,22 @@ public class Main {
                     }
                     break;
                 case "9":
-                    System.out.println("Event Planner");
+                    System.out.println("Event Planner Summary");
                     System.out.println("Guests: " + guestList.getGuestCount());
                     System.out.println("Venue: " + (selectedVenue == null ? "None" : selectedVenue.getName()));
                     System.out.println("Remaining tasks: " + taskManager.remainingTaskCount());
                     break;
-                case "10":
+                case "0":
                     System.out.println("Event Planner Menu Exiting Now!");
                     finished = true;
                     break;
                 default:
-                    System.out.println("Please enter a valid vent planner menu option.");
-
+                    System.out.println("Please enter a valid event planner menu option.");
             }
         }
+        keyboard.close();
     }
+
     private static List<Venue> sampleVenues() {
         List<Venue> venues = new ArrayList<>();
         venues.add(new Venue("Palace", 10000, 500, 50, 10));
