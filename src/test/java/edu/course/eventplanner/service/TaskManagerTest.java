@@ -1,59 +1,73 @@
 package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Task;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import java.util.*;
 
 public class TaskManagerTest {
-    TaskManager manager = new TaskManager();
-
+    @DisplayName("Adding a task stores it in the upcoming queue")
     @Test
-    public void testAddTask() {
-         Task task = new Task("Testing");
-         manager.addTask(task);
-
-         assertEquals(1, manager.remainingTaskCount());
+    void addTaskStoresCorrectTask() {
+        TaskManager m = new TaskManager();
+        m.addTask(new Task("Decorate"));
+        List<Task> tasks = m.getTasks();
+        assertEquals(1, tasks.size());
+        assertEquals("Decorate", tasks.get(0).getDescription());
     }
 
+    @DisplayName("executeNextTask removes from upcoming and pushes to completed")
     @Test
-    public void executeNextTask() {
-        Task task = new Task("Testing");
-        Task task2 = new Task("Testing2");
-        manager.addTask(task);
-        manager.addTask(task2);
-
-        Task executed =  manager.executeNextTask();
-
-        assertEquals(task, executed, "In the correct order.");
-        assertEquals(1,manager.remainingTaskCount());
+    void executeNextTaskMovesTaskCorrectly() {
+        TaskManager m = new TaskManager();
+        Task t1 = new Task("A");
+        Task t2 = new Task("B");
+        m.addTask(t1);
+        m.addTask(t2);
+        Task executed = m.executeNextTask();
+        assertEquals(t1, executed);
+        assertEquals(1, m.remainingTaskCount());
+        assertEquals(t1, m.getCompletedTasks().peek());
     }
 
+    @DisplayName("executeNextTask returns null when no tasks remain")
     @Test
-    public void undoLastTask() {
-        Task task = new Task("Testing");
-        Task task2 = new Task("Testing2");
-        manager.addTask(task);
-        manager.addTask(task2);
-
-        Task executed =  manager.executeNextTask();
-        Task undone = manager.undoLastTask();
-
-        assertEquals(task, undone, "Undo should return the last completed task");
-        assertEquals(1, manager.remainingTaskCount(), "Undo should NOT requeue the task");
+    void executeNextTaskOnEmptyQueue() {
+        TaskManager m = new TaskManager();
+        assertNull(m.executeNextTask());
     }
 
+    @DisplayName("undoLastTask pops from completed stack and does not requeue")
     @Test
-    public void remainingTaskCount() {
-        Task task = new Task("Testing");
-        Task task2 = new Task("Testing2");
-        manager.addTask(task);
-        manager.addTask(task2);
+    void undoLastTaskReturnsLastCompleted() {
+        TaskManager m = new TaskManager();
+        Task t1 = new Task("A");
+        Task t2 = new Task("B");
+        m.addTask(t1);
+        m.addTask(t2);
+        m.executeNextTask();
+        Task undone = m.undoLastTask();
+        assertEquals(t1, undone);
+        assertEquals(1, m.remainingTaskCount());
+        assertTrue(m.getCompletedTasks().isEmpty());
+    }
 
-        int remaining = manager.remainingTaskCount();
+    @DisplayName("undoLastTask returns null when no tasks have been executed")
+    @Test
+    void undoLastTaskOnEmptyCompletedStack() {
+        TaskManager m = new TaskManager();
+        assertNull(m.undoLastTask());
+    }
 
-        assertEquals(2, remaining);
+    @DisplayName("remainingTaskCount reflects number of tasks in upcoming queue")
+    @Test
+    void remainingTaskCountWorks() {
+        TaskManager m = new TaskManager();
+        m.addTask(new Task("A"));
+        m.addTask(new Task("B"));
+        assertEquals(2, m.remainingTaskCount());
     }
 }

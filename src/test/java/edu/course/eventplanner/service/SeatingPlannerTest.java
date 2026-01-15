@@ -2,6 +2,7 @@ package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Guest;
 import edu.course.eventplanner.model.Venue;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SeatingPlannerTest {
+    @DisplayName("Venue getters return correct values")
     @Test
     public void testSeatingPlanner() {
         Venue venue = new Venue("Palace", 10000, 500, 50, 10);
@@ -18,7 +20,10 @@ public class SeatingPlannerTest {
         assertEquals(50, venue.getTables());
         assertEquals(10, venue.getSeatsPerTable());
     }
-    @Test public void generateSeatingTest() {
+
+    @DisplayName("generateSeating distributes 325 guests across 33 tables correctly")
+    @Test
+    public void generateSeatingTest() {
         Venue venue = new Venue("Palace", 10000, 500, 50, 10);
         SeatingPlanner planner = new SeatingPlanner(venue);
         List<Guest> guests = new ArrayList<>();
@@ -32,24 +37,49 @@ public class SeatingPlannerTest {
         assertEquals(10, seatingMap.get(2).size());
         assertEquals(10, seatingMap.get(3).size());
         assertEquals(5, seatingMap.get(33).size());
-        assertEquals("guest 0 description", seatingMap.get(1).get(0).getName());
-        assertEquals("guest 10 description", seatingMap.get(2).get(0).getName());
-        assertEquals("guest 20 description", seatingMap.get(3).get(0).getName());
+        assertEquals("guest 0", seatingMap.get(1).get(0).getName());
+        assertEquals("description", seatingMap.get(1).get(0).getGroupTag());
+        assertEquals("guest 10", seatingMap.get(2).get(0).getName());
+        assertEquals("description", seatingMap.get(2).get(0).getGroupTag());
+        assertEquals("guest 20", seatingMap.get(3).get(0).getName());
+        assertEquals("description", seatingMap.get(3).get(0).getGroupTag());
     }
-    @Test public void testGroupSeatingKeepsGroupsTogether() {
+
+    @DisplayName("generateSeating returns empty map when no guests")
+    @Test
+    void testNoGuests() {
+        SeatingPlanner p = new SeatingPlanner(new Venue("V", 100, 10, 5, 2));
+        Map<Integer, List<Guest>> result = p.generateSeating(Collections.emptyList());
+        assertTrue(result.isEmpty());
+    }
+
+    @DisplayName("generateSeating handles overflow guests by creating extra tables")
+    @Test
+    void testOverflowGuests() {
+        Venue v = new Venue("V", 100, 4, 2, 2);
+        SeatingPlanner p = new SeatingPlanner(v);
+        List<Guest> guests = List.of(new Guest("A", "g"), new Guest("B", "g"), new Guest("C", "g"), new Guest("D", "g"), new Guest("E", "g"));
+        Map<Integer, List<Guest>> result = p.generateSeating(guests);
+        assertEquals(2, result.get(1).size());
+        assertEquals(2, result.get(2).size());
+        assertEquals(1, result.get(3).size());
+    }
+
+    @DisplayName("Guests with the same group tag are seated before other groups")
+    @Test
+    public void testGroupSeatingKeepsGroupsTogether() {
         Venue v = new Venue("TestVenue", 1000, 10, 5, 2);
         SeatingPlanner planner = new SeatingPlanner(v);
-        List<Guest> guests = Arrays.asList( new Guest("Alice", "family"),
-                new Guest("Bob", "family"), new Guest("Charlie", "friends"),
-                new Guest("Dana", "friends") );
+        List<Guest> guests = Arrays.asList(new Guest("Alice", "family"), new Guest("Bob", "family"), new Guest("Charlie", "friends"), new Guest("Dana", "friends"));
         Map<Integer, List<Guest>> seating = planner.generateSeating(guests);
-        assertNotNull(seating); assertFalse(seating.isEmpty());
+        assertNotNull(seating);
+        assertFalse(seating.isEmpty());
         List<Guest> all = new ArrayList<>();
         for (List<Guest> table : seating.values()) {
             all.addAll(table);
         }
         int firstFamily = all.indexOf(guests.get(0));
         int firstFriend = all.indexOf(guests.get(2));
-        assertTrue(firstFamily < firstFriend, "Family group should be seated before friends");
+        assertTrue(firstFamily < firstFriend);
     }
 }

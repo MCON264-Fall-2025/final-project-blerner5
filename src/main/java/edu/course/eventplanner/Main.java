@@ -69,8 +69,8 @@ public class Main {
                     System.out.print("Enter event budget: ");
                     double budget = Double.parseDouble(keyboard.nextLine());
                     int count = guestList.getGuestCount();
-                    VenueSelector selector = new VenueSelector(venues);
-                    selectedVenue = selector.selectVenue(budget, count);
+                    VenueSelector selector = new VenueSelector();
+                    selectedVenue = selector.selectVenue(venues, count, budget);
                     if (selectedVenue != null) {
                         System.out.println("Selected venue: " + selectedVenue.getName());
                     } else {
