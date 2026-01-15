@@ -38,7 +38,7 @@ public class Main {
             switch (answer) {
                 case "1":
                     venues = sampleVenues();
-                    List<Guest> samples = sampleGuests(325);
+                    List<Guest> samples = sampleGuests(50);
                     for (Guest g : samples) {
                         guestList.addGuest(g);
                     }
