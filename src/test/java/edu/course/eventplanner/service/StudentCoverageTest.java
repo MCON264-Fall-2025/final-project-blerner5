@@ -1,5 +1,6 @@
 package edu.course.eventplanner.service;
 
+
 import edu.course.eventplanner.model.Guest;
 import edu.course.eventplanner.model.Venue;
 import edu.course.eventplanner.service.SeatingPlanner;
