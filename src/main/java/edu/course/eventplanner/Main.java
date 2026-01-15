@@ -1,7 +1,7 @@
 package edu.course.eventplanner;
 
 import java.util.*;
-//hello world
+
 import edu.course.eventplanner.service.*;
 import edu.course.eventplanner.model.*;
 
@@ -125,10 +125,10 @@ public class Main {
     private static List<Venue> sampleVenues() {
         List<Venue> venues = new ArrayList<>();
         venues.add(new Venue("Palace", 10000, 500, 50, 10));
-        venues.add(new Venue("Grand Hall", 8000, 300, 30, 10));
-        venues.add(new Venue("Garden Terrace", 6000, 200, 20, 10));
-        venues.add(new Venue("Community Center", 2000, 100, 10, 10));
-        venues.add(new Venue("Backyard Tent", 500, 40, 4, 10));
+        venues.add(new Venue("Heitner", 8000, 300, 30, 10));
+        venues.add(new Venue("The Rockleigh", 6000, 200, 20, 10));
+        venues.add(new Venue("Marina Del Ray", 2000, 100, 10, 10));
+        venues.add(new Venue("Chynka", 500, 40, 4, 10));
         return venues;
     }
 
