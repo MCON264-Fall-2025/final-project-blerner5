@@ -1,9 +1,17 @@
 package edu.course.eventplanner;
 
-import java.util.*;
+import edu.course.eventplanner.model.Guest;
+import edu.course.eventplanner.model.Task;
+import edu.course.eventplanner.model.Venue;
+import edu.course.eventplanner.service.GuestListManager;
+import edu.course.eventplanner.service.SeatingPlanner;
+import edu.course.eventplanner.service.TaskManager;
+import edu.course.eventplanner.service.VenueSelector;
 
-import edu.course.eventplanner.service.*;
-import edu.course.eventplanner.model.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,8 +39,8 @@ public class Main {
                 case "1":
                     venues = sampleVenues();
                     List<Guest> samples = sampleGuests(325);
-                    for (int i = 0; i < samples.size(); i++) {
-                        guestList.addGuest(samples.get(i));
+                    for (Guest g : samples) {
+                        guestList.addGuest(g);
                     }
                     System.out.println("Loaded sample venues and 325 guests.");
                     break;
@@ -76,9 +84,7 @@ public class Main {
                         SeatingPlanner planner = new SeatingPlanner(selectedVenue);
                         Map<Integer, List<Guest>> seating = planner.generateSeating(guestList.getAllGuests());
                         System.out.println("Seating chart generated:");
-                        List<Integer> tableNumbers = new ArrayList<>(seating.keySet());
-                        for (int i = 0; i < tableNumbers.size(); i++) {
-                            int table = tableNumbers.get(i);
+                        for (Integer table : seating.keySet()) {
                             System.out.println("Table " + table + ": " + seating.get(table).size() + " guests");
                         }
                     }
@@ -125,10 +131,10 @@ public class Main {
     private static List<Venue> sampleVenues() {
         List<Venue> venues = new ArrayList<>();
         venues.add(new Venue("Palace", 10000, 500, 50, 10));
-        venues.add(new Venue("Heitner", 8000, 300, 30, 10));
-        venues.add(new Venue("The Rockleigh", 6000, 200, 20, 10));
-        venues.add(new Venue("Marina Del Ray", 2000, 100, 10, 10));
-        venues.add(new Venue("Chynka", 500, 40, 4, 10));
+        venues.add(new Venue("Grand Hall", 8000, 300, 30, 10));
+        venues.add(new Venue("Garden Terrace", 6000, 200, 20, 10));
+        venues.add(new Venue("Community Center", 2000, 100, 10, 10));
+        venues.add(new Venue("Backyard Tent", 500, 40, 4, 10));
         return venues;
     }
 
