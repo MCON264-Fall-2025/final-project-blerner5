@@ -1,12 +1,8 @@
 package edu.course.eventplanner;
 
-import edu.course.eventplanner.model.Guest;
-import edu.course.eventplanner.model.Task;
-import edu.course.eventplanner.model.Venue;
-import edu.course.eventplanner.service.GuestListManager;
-import edu.course.eventplanner.service.SeatingPlanner;
-import edu.course.eventplanner.service.TaskManager;
-import edu.course.eventplanner.service.VenueSelector;
+import edu.course.eventplanner.model.*;
+import edu.course.eventplanner.service.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
