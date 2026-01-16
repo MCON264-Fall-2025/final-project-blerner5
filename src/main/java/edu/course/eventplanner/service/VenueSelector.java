@@ -1,10 +1,22 @@
 package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Venue;
-import java.util.*;
+
+import java.util.List;
 
 public class VenueSelector {
-    private final List<Venue> venues;
-    public VenueSelector(List<Venue> venues) { this.venues = venues; }
-    public Venue selectVenue(double budget, int guestCount) { return null; }
+    public VenueSelector() {
+    }
+
+    public Venue selectVenue(List<Venue> venues, int guestCount, double budget) {
+        Venue best = null;
+        for (Venue v : venues) {
+            if (v.getCapacity() >= guestCount && v.getCost() <= budget) {
+                if (best == null || v.getCost() < best.getCost()) {
+                    best = v;
+                }
+            }
+        }
+        return best;
+    }
 }
