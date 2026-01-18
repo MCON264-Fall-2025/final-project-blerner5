@@ -43,10 +43,10 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-                </executions> <!-- IMPORTANT: include all eventplanner packages -->
+                </executions> <!-- CRITICAL: include ALL subpackages recursively -->
                 <configuration>
                     <includes>
-                        <include>edu.course.eventplanner.*</include>
+                        <include>edu/course/eventplanner/**</include>
                     </includes>
                 </configuration>
             </plugin>
