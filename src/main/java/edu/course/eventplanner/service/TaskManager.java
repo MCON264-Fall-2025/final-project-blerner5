@@ -2,11 +2,16 @@ package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Task;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
 public class TaskManager {
     private final Queue<Task> upcoming = new LinkedList<>();
     private final Stack<Task> completed = new Stack<>();
+
+    public TaskManager() {
+    }
 
     public void addTask(Task task) {
         upcoming.add(task);
@@ -30,13 +35,5 @@ public class TaskManager {
 
     public int remainingTaskCount() {
         return upcoming.size();
-    }
-
-    public List<Task> getTasks() {
-        return new ArrayList<>(upcoming);
-    }
-
-    public Stack<Task> getCompletedTasks() {
-        return completed;
     }
 }

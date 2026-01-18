@@ -2,14 +2,17 @@ package edu.course.eventplanner.service;
 
 import edu.course.eventplanner.model.Guest;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GuestListManager {
-    private final List<Guest> guests = new ArrayList<>();
+    private final LinkedList<Guest> guests = new LinkedList<>();
     private final Map<String, Guest> guestsByName = new HashMap<>();
+
+    public GuestListManager() {
+    }
 
     public void addGuest(Guest guest) {
         if (guest != null) {
@@ -36,6 +39,6 @@ public class GuestListManager {
     }
 
     public List<Guest> getAllGuests() {
-        return new ArrayList<>(guests);
-        }
+        return new LinkedList<>(guests);
+    }
 }

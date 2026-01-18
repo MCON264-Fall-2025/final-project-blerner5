@@ -3,10 +3,7 @@ package edu.course.eventplanner.service;
 import edu.course.eventplanner.model.Guest;
 import edu.course.eventplanner.model.Venue;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SeatingPlanner {
     private final Venue venue;
@@ -25,17 +22,24 @@ public class SeatingPlanner {
         if (seatsPerTable <= 0 || maxTables <= 0) {
             return seatingMap;
         }
+        Map<String, Queue<Guest>> groups = new HashMap<>();
+        for (Guest g : guests) {
+            groups.computeIfAbsent(g.getGroupTag(), k -> new LinkedList<>()).add(g);
+        }
+        TreeMap<String, Queue<Guest>> orderedGroups = new TreeMap<>(groups);
         int tableNumber = 1;
         List<Guest> currentTable = new ArrayList<>();
-        for (Guest g : guests) {
-            if (tableNumber > maxTables) {
-                break;
-            }
-            currentTable.add(g);
-            if (currentTable.size() == seatsPerTable) {
-                seatingMap.put(tableNumber, currentTable);
-                tableNumber++;
-                currentTable = new ArrayList<>();
+        for (Queue<Guest> queue : orderedGroups.values()) {
+            while (!queue.isEmpty()) {
+                if (tableNumber > maxTables) {
+                    return seatingMap;
+                }
+                currentTable.add(queue.poll());
+                if (currentTable.size() == seatsPerTable) {
+                    seatingMap.put(tableNumber, currentTable);
+                    tableNumber++;
+                    currentTable = new ArrayList<>();
+                }
             }
         }
         if (!currentTable.isEmpty() && tableNumber <= maxTables) {
