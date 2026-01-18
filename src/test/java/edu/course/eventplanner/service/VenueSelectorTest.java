@@ -38,5 +38,11 @@ public class VenueSelectorTest {
         assertNotNull(result);
         assertEquals("B", result.getName());
     }
+
+    @Test
+    public void testNoVenueFits() {
+        List<Venue> venues = List.of(new Venue("Tiny", 5, 1, 1, 1));
+        VenueSelector selector = new VenueSelector(venues);
+        assertNull(selector.selectVenue(100, 100));
+    }
 }
-//fixing venue selector
