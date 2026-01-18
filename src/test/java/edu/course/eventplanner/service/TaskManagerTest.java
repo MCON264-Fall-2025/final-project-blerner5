@@ -48,16 +48,27 @@ public class TaskManagerTest {
         assertEquals(t1, undone);
         assertEquals(1, manager.remainingTaskCount());
     }
+
     @DisplayName("undoLastTask returns null when no tasks have been executed")
-    @Test void undoLastTaskOnEmptyCompletedStack() {
+    @Test
+    void undoLastTaskOnEmptyCompletedStack() {
         TaskManager manager = new TaskManager();
         assertNull(manager.undoLastTask());
     }
+
     @DisplayName("remainingTaskCount reflects number of tasks in upcoming queue")
-    @Test void remainingTaskCountWorks() {
+    @Test
+    void remainingTaskCountWorks() {
         TaskManager manager = new TaskManager();
         manager.addTask(new Task("A"));
         manager.addTask(new Task("B"));
         assertEquals(2, manager.remainingTaskCount());
+    }
+
+    @Test
+    void testExecuteNextTaskOnEmptyManager() {
+        TaskManager manager = new TaskManager();
+        assertNull(manager.executeNextTask());
+        assertEquals(0, manager.remainingTaskCount());
     }
 }

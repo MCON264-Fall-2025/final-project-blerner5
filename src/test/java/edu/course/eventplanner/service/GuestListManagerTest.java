@@ -50,4 +50,17 @@ public class GuestListManagerTest {
         assertEquals(1, list.getGuestCount());
         assertNotNull(list.findGuest("Leah"));
     }
+
+    @Test
+    void testFindGuest() {
+        GuestListManager manager = new GuestListManager();
+        manager.addGuest(new Guest("A", "x"));
+        assertNotNull(manager.findGuest("A"));
+    }
+
+    @Test
+    void testFindGuestNotFound() {
+        GuestListManager manager = new GuestListManager();
+        assertNull(manager.findGuest("Z"));
+    }
 }
