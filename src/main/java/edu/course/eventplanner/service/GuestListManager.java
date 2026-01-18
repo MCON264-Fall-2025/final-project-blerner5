@@ -3,34 +3,32 @@ package edu.course.eventplanner.service;
 import edu.course.eventplanner.model.Guest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GuestListManager {
     private final List<Guest> guests = new ArrayList<>();
+    private final Map<String, Guest> guestsByName = new HashMap<>();
 
     public void addGuest(Guest guest) {
         if (guest != null) {
             guests.add(guest);
+            guestsByName.put(guest.getName(), guest);
         }
     }
 
     public boolean removeGuest(String guestName) {
-        for (int i = 0; i < guests.size(); i++) {
-            if (guests.get(i).getName().equals(guestName)) {
-                guests.remove(i);
-                return true;
-            }
+        Guest removed = guestsByName.remove(guestName);
+        if (removed == null) {
+            return false;
         }
-        return false;
+        guests.removeIf(g -> g.getName().equals(guestName));
+        return true;
     }
 
     public Guest findGuest(String guestName) {
-        for (Guest g : guests) {
-            if (g.getName().equals(guestName)) {
-                return g;
-            }
-        }
-        return null;
+        return guestsByName.get(guestName);
     }
 
     public int getGuestCount() {
@@ -39,5 +37,5 @@ public class GuestListManager {
 
     public List<Guest> getAllGuests() {
         return new ArrayList<>(guests);
-    }
+        }
 }

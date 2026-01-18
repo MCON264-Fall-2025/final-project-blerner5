@@ -1,10 +1,13 @@
 package edu.course.eventplanner;
 
-import edu.course.eventplanner.model.*;
-import edu.course.eventplanner.service.*;
+import edu.course.eventplanner.model.Guest;
+import edu.course.eventplanner.model.Task;
+import edu.course.eventplanner.model.Venue;
+import edu.course.eventplanner.service.GuestListManager;
+import edu.course.eventplanner.service.SeatingPlanner;
+import edu.course.eventplanner.service.TaskManager;
+import edu.course.eventplanner.service.VenueSelector;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -14,7 +17,7 @@ public class Main {
         Scanner keyboard = new Scanner(System.in);
         GuestListManager guestList = new GuestListManager();
         TaskManager taskManager = new TaskManager();
-        List<Venue> venues = new ArrayList<>();
+        List<Venue> venues = null;
         Venue selectedVenue = null;
         boolean finished = false;
         while (!finished) {
@@ -33,12 +36,8 @@ public class Main {
             String answer = keyboard.nextLine();
             switch (answer) {
                 case "1":
-                    venues = sampleVenues();
-                    List<Guest> samples = sampleGuests(50);
-                    for (Guest g : samples) {
-                        guestList.addGuest(g);
-                    }
-                    System.out.println("Loaded sample venues and 325 guests.");
+                    venues = List.of();
+                    System.out.println("Sample data cleared.");
                     break;
                 case "2":
                     System.out.print("Enter guest name: ");
@@ -58,7 +57,7 @@ public class Main {
                     }
                     break;
                 case "4":
-                    if (venues.isEmpty()) {
+                    if (venues == null || venues.isEmpty()) {
                         System.out.println("Load sample data first.");
                         break;
                     }
@@ -122,23 +121,5 @@ public class Main {
             }
         }
         keyboard.close();
-    }
-
-    private static List<Venue> sampleVenues() {
-        List<Venue> venues = new ArrayList<>();
-        venues.add(new Venue("Palace", 10000, 500, 50, 10));
-        venues.add(new Venue("Grand Hall", 8000, 300, 30, 10));
-        venues.add(new Venue("Garden Terrace", 6000, 200, 20, 10));
-        venues.add(new Venue("Community Center", 2000, 100, 10, 10));
-        venues.add(new Venue("Backyard Tent", 500, 40, 4, 10));
-        return venues;
-    }
-
-    private static List<Guest> sampleGuests(int n) {
-        List<Guest> guests = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            guests.add(new Guest("guest " + i, "description"));
-        }
-        return guests;
     }
 }
