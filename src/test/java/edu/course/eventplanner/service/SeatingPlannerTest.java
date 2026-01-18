@@ -1,0 +1,101 @@
+package edu.course.eventplanner.service;
+
+import edu.course.eventplanner.model.Guest;
+import edu.course.eventplanner.model.Venue;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class SeatingPlannerTest {
+    @DisplayName("Venue getters return correct values")
+    @Test
+    public void testSeatingPlanner() {
+        Venue venue = new Venue("Palace", 10000, 500, 50, 10);
+        assertEquals("Palace", venue.getName());
+        assertEquals(10000.00, venue.getCost());
+        assertEquals(500, venue.getCapacity());
+        assertEquals(50, venue.getTables());
+        assertEquals(10, venue.getSeatsPerTable());
+    }
+
+    @DisplayName("generateSeating distributes 325 guests across 33 tables correctly")
+    @Test
+    public void generateSeatingTest() {
+        Venue venue = new Venue("Palace", 10000, 500, 50, 10);
+        SeatingPlanner planner = new SeatingPlanner(venue);
+        List<Guest> guests = new ArrayList<>();
+        for (int i = 0; i < 325; i++) {
+            guests.add(new Guest("guest " + i, "description"));
+        }
+        Map<Integer, List<Guest>> seatingMap = planner.generateSeating(guests);
+        assertNotNull(seatingMap);
+        assertEquals(33, seatingMap.size());
+        assertEquals(10, seatingMap.get(1).size());
+        assertEquals(10, seatingMap.get(2).size());
+        assertEquals(10, seatingMap.get(3).size());
+        assertEquals(5, seatingMap.get(33).size());
+        assertEquals("guest 0", seatingMap.get(1).get(0).getName());
+        assertEquals("description", seatingMap.get(1).get(0).getGroupTag());
+        assertEquals("guest 10", seatingMap.get(2).get(0).getName());
+        assertEquals("description", seatingMap.get(2).get(0).getGroupTag());
+        assertEquals("guest 20", seatingMap.get(3).get(0).getName());
+        assertEquals("description", seatingMap.get(3).get(0).getGroupTag());
+    }
+
+    @DisplayName("generateSeating returns empty map when no guests")
+    @Test
+    void testNoGuests() {
+        SeatingPlanner p = new SeatingPlanner(new Venue("V", 100, 10, 5, 2));
+        Map<Integer, List<Guest>> result = p.generateSeating(Collections.emptyList());
+        assertTrue(result.isEmpty());
+    }
+
+    @DisplayName("generateSeating handles overflow guests by creating extra tables")
+    @Test
+    void testOverflowGuests() {
+        Venue v = new Venue("V", 100, 4, 2, 2);
+        SeatingPlanner p = new SeatingPlanner(v);
+        List<Guest> guests = List.of(new Guest("A", "g"), new Guest("B", "g"), new Guest("C", "g"), new Guest("D", "g"), new Guest("E", "g"));
+        Map<Integer, List<Guest>> result = p.generateSeating(guests);
+        assertEquals(2, result.get(1).size());
+        assertEquals(2, result.get(2).size());
+        long overflowCount = result.values().stream().filter(list -> list.size() == 1).count();
+        assertEquals(0, overflowCount);
+    }
+
+    @DisplayName("Guests with the same group tag are seated before other groups")
+    @Test
+    public void testGroupSeatingKeepsGroupsTogether() {
+        Venue v = new Venue("TestVenue", 1000, 10, 5, 2);
+        SeatingPlanner planner = new SeatingPlanner(v);
+        List<Guest> guests = Arrays.asList(new Guest("Alice", "family"), new Guest("Bob", "family"), new Guest("Charlie", "friends"), new Guest("Dana", "friends"));
+        Map<Integer, List<Guest>> seating = planner.generateSeating(guests);
+        assertNotNull(seating);
+        assertFalse(seating.isEmpty());
+        List<Guest> all = new ArrayList<>();
+        for (List<Guest> table : seating.values()) {
+            all.addAll(table);
+        }
+        int firstFamily = all.indexOf(guests.get(0));
+        int firstFriend = all.indexOf(guests.get(2));
+        assertTrue(firstFamily < firstFriend);
+    }
+
+    @Test
+    public void testGenerateSeatingBasic() {
+        Venue v = new Venue("Test", 50, 10, 5, 2);
+        SeatingPlanner planner = new SeatingPlanner(v);
+
+        List<Guest> guests = Arrays.asList(
+                new Guest("Alice", "Family"),
+                new Guest("Bob", "Family")
+        );
+
+        Map<Integer, List<Guest>> seating = planner.generateSeating(guests);
+
+        assertNotNull(seating);
+    }
+}
