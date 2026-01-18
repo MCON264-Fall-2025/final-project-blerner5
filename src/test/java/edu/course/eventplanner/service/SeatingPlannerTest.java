@@ -82,4 +82,19 @@ public class SeatingPlannerTest {
         int firstFriend = all.indexOf(guests.get(2));
         assertTrue(firstFamily < firstFriend);
     }
+
+    @Test
+    public void testGenerateSeatingBasic() {
+        Venue v = new Venue("Test", 50, 10, 5, 2);
+        SeatingPlanner planner = new SeatingPlanner(v);
+
+        List<Guest> guests = Arrays.asList(
+                new Guest("Alice", "Family"),
+                new Guest("Bob", "Family")
+        );
+
+        Map<Integer, List<Guest>> seating = planner.generateSeating(guests);
+
+        assertNotNull(seating);
+    }
 }
