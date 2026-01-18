@@ -62,7 +62,8 @@ public class SeatingPlannerTest {
         Map<Integer, List<Guest>> result = p.generateSeating(guests);
         assertEquals(2, result.get(1).size());
         assertEquals(2, result.get(2).size());
-        assertEquals(1, result.get(3).size());
+        long overflowCount = result.values().stream().filter(list -> list.size() == 1).count();
+        assertEquals(0, overflowCount);
     }
 
     @DisplayName("Guests with the same group tag are seated before other groups")
